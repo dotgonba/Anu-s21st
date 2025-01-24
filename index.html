@@ -96,11 +96,11 @@
             const nowUTC = new Date();
             const nowCST = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
-            // Set target time to 11:00 PM (Chicago time)
+            // Set target time to 11:30 PM (Chicago time)
             const targetTime = new Date(nowCST);
-            targetTime.setHours(23, 0, 0, 0); // 11:00 PM CST
+            targetTime.setHours(23, 30, 0, 0); // 11:30 PM CST
 
-            // If the current time is already past 11:00 PM, set the target time to tomorrow
+            // If the current time is already past 11:30 PM, set the target time to tomorrow
             if (nowCST > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
