@@ -44,19 +44,6 @@
             border: 5px solid white;
             border-radius: 10px;
         }
-        #play-music-btn {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            background-color: #ff85a2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #play-music-btn:hover {
-            background-color: #ff6f91;
-        }
     </style>
 </head>
 <body>
@@ -67,7 +54,7 @@
             <div id="timer-text">Loading...</div>
             <span class="heart">❤️</span>
         </div>
-        <button id="play-music-btn">Play Me</button>
+        <button id="playButton">Play Me</button>
     </div>
     <div id="celebration">
         <h1>🎉 Happy 21st baby! 🎉</h1>
@@ -82,30 +69,22 @@
     </audio>
 
     <script>
-        const music = document.getElementById('countdown-music');
-        const playMusicBtn = document.getElementById('play-music-btn');
-
-        playMusicBtn.addEventListener('click', () => {
-            music.play();
-            playMusicBtn.disabled = true; // Disable the button after clicking
-            playMusicBtn.innerText = "Music Playing...";
-        });
-
         function updateCountdown() {
-            // Get the current time in UTC and adjust for Chicago timezone (UTC-6 or UTC-5 during DST)
+            // Get the current time in UTC and adjust for New York timezone (UTC-5 or UTC-4 during DST)
             const nowUTC = new Date();
-            const nowCST = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/Chicago" }));
+            const nowNYC = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/New_York" }));
 
-            // Set target time to 8:15 PM (Chicago time)
-            const targetTime = new Date(nowCST);
-            targetTime.setHours(20, 15, 0, 0); // 8:15 PM CST
+            // Set target time to 12:00 AM (New York time)
+            const targetTime = new Date(nowNYC);
+            targetTime.setHours(0, 0, 0, 0); // Midnight in New York
 
-            // If the current time is already past 8:15 PM, set the target time to tomorrow
-            if (nowCST > targetTime) {
+            // If the current time is already past midnight, set the target time to tomorrow
+            if (nowNYC > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
 
-            const timeRemaining = targetTime - nowCST;
+            const timeRemaining = targetTime - nowNYC;
+            const music = document.getElementById('countdown-music');
 
             if (timeRemaining <= 0) {
                 // Stop the countdown, music, and trigger celebration
@@ -123,13 +102,24 @@
 
             document.getElementById('timer-text').innerHTML = 
                 `${hours}h ${minutes}m ${seconds}s`;
+
+            // Play music if it's not already playing
+            if (music.paused) {
+                music.play();
+            }
         }
 
         // Update the countdown every second
         const timerInterval = setInterval(updateCountdown, 1000);
         updateCountdown(); // Run immediately
+
+        // Play music when button is clicked
+        document.getElementById('playButton').addEventListener('click', function() {
+            const music = document.getElementById('countdown-music');
+            if (music.paused) {
+                music.play();
+            }
+        });
     </script>
 </body>
 </html>
-
-
