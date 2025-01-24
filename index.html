@@ -44,6 +44,19 @@
             border: 5px solid white;
             border-radius: 10px;
         }
+        #play-music-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #ff85a2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #play-music-btn:hover {
+            background-color: #ff6f91;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +67,7 @@
             <div id="timer-text">Loading...</div>
             <span class="heart">❤️</span>
         </div>
+        <button id="play-music-btn">Play Music</button>
     </div>
     <div id="celebration">
         <h1>🎉 Happy 21st baby! 🎉</h1>
@@ -62,12 +76,21 @@
             Your browser does not support the video tag.
         </video>
     </div>
-    <audio id="countdown-music" loop autoplay>
+    <audio id="countdown-music" loop>
         <source src="countdown-music.mp3" type="audio/mpeg">
         Your browser does not support the audio tag.
     </audio>
 
     <script>
+        const music = document.getElementById('countdown-music');
+        const playMusicBtn = document.getElementById('play-music-btn');
+
+        playMusicBtn.addEventListener('click', () => {
+            music.play();
+            playMusicBtn.disabled = true; // Disable the button after clicking
+            playMusicBtn.innerText = "Music Playing...";
+        });
+
         function updateCountdown() {
             // Get the current time in UTC and adjust for Chicago timezone (UTC-6 or UTC-5 during DST)
             const nowUTC = new Date();
@@ -85,12 +108,12 @@
             const timeRemaining = targetTime - nowCST;
 
             if (timeRemaining <= 0) {
-                // Stop the countdown and trigger celebration
+                // Stop the countdown, music, and trigger celebration
                 clearInterval(timerInterval);
                 document.getElementById('countdown-section').style.display = "none"; // Hide countdown
                 document.getElementById('celebration').style.display = "block"; // Show celebration
                 document.getElementById('celebration-video').play(); // Play video
-                document.getElementById('countdown-music').pause(); // Stop music
+                music.pause(); // Stop music
                 return;
             }
 
