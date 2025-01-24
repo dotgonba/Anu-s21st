@@ -44,6 +44,20 @@
             border: 5px solid white;
             border-radius: 10px;
         }
+        button {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            background-color: #ff6f91;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff4a70;
+        }
     </style>
 </head>
 <body>
@@ -62,18 +76,30 @@
             Your browser does not support the video tag.
         </video>
     </div>
+    <audio id="countdown-music" loop>
+        <source src="countdown-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+
+    <button id="start-button">Start Countdown</button>
 
     <script>
+        const music = document.getElementById('countdown-music');
+        const startButton = document.getElementById('start-button');
+
+        function startCountdown() {
+            music.play().catch(error => console.error("Music autoplay blocked:", error)); // Play music
+            startButton.style.display = "none"; // Hide the button
+            setupCountdown(); // Start the countdown
+        }
+
         function updateCountdown() {
-            // Get the current time in UTC and adjust for Chicago timezone (UTC-6 or UTC-5 during DST)
             const nowUTC = new Date();
             const nowCST = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
-            // Set target time to 7:27 PM (Chicago time)
             const targetTime = new Date(nowCST);
             targetTime.setHours(19, 27, 0, 0); // 7:27 PM CST
 
-            // If the current time is already past 7:27 PM, set the target time to tomorrow
             if (nowCST > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
@@ -81,11 +107,11 @@
             const timeRemaining = targetTime - nowCST;
 
             if (timeRemaining <= 0) {
-                // Stop the countdown and trigger celebration
                 clearInterval(timerInterval);
-                document.getElementById('countdown-section').style.display = "none"; // Hide countdown
-                document.getElementById('celebration').style.display = "block"; // Show celebration
-                document.getElementById('celebration-video').play(); // Play video
+                document.getElementById('countdown-section').style.display = "none";
+                document.getElementById('celebration').style.display = "block";
+                document.getElementById('celebration-video').play();
+                music.pause();
                 return;
             }
 
@@ -97,9 +123,14 @@
                 `${hours}h ${minutes}m ${seconds}s`;
         }
 
-        // Update the countdown every second
-        const timerInterval = setInterval(updateCountdown, 1000);
-        updateCountdown(); // Run immediately
+        let timerInterval = null;
+        function setupCountdown() {
+            timerInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }
+
+        startButton.onclick = startCountdown;
     </script>
 </body>
 </html>
+
