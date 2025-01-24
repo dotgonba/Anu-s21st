@@ -13,7 +13,7 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom right, #ff6f91, #ffb3d9); /* Restored original gradient */
+            background: linear-gradient(to bottom right, #ff6f91, #ffb3d9);
             color: white;
             text-align: center;
             overflow: hidden;
@@ -69,11 +69,11 @@
             const nowUTC = new Date();
             const nowCST = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
-            // Set target time to 3:08 PM (Chicago time)
+            // Set target time to 7:27 PM (Chicago time)
             const targetTime = new Date(nowCST);
-            targetTime.setHours(15, 8, 0, 0); // 3:08 PM CST
+            targetTime.setHours(19, 27, 0, 0); // 7:27 PM CST
 
-            // If the current time is already past 3:08 PM, set the target time to tomorrow
+            // If the current time is already past 7:27 PM, set the target time to tomorrow
             if (nowCST > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
